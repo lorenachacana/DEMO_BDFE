@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BDFE — Demo pública</title>
+<style>
+  :root{
+    --bg:#f0f2f5; --card:#fff; --text:#1a1a2e; --muted:#6b7280; --line:#e5e7eb;
+    --primary:#4f46e5; --primary2:#7c3aed; --ok:#0d7a4a; --warn:#b76e0c;
+    --shadow:0 4px 24px rgba(0,0,0,.06); --radius:20px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);padding:20px}
+  .wrap{max-width:900px;margin:auto}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  h1{margin:0;font-size:28px;background:linear-gradient(135deg,var(--primary),var(--primary2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .demo-badge{background:#eef2ff;border:1px solid #c7d2fe;color:#4338ca;padding:8px 14px;border-radius:999px;font-weight:700;font-size:13px}
+  .notice{background:#fff7ed;border:1px solid #fed7aa;border-radius:16px;padding:14px 16px;margin-bottom:16px;color:#9a3412;font-size:14px}
+  .tabs{display:flex;gap:8px;margin-bottom:16px}
+  .tab{flex:1;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px 16px;font-weight:700;color:var(--muted);cursor:pointer}
+  .tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+  .card{background:var(--card);border-radius:var(--radius);padding:26px 30px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04);margin-bottom:16px}
+  .eyebrow{font-size:13px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--muted);margin-bottom:12px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+  .task{background:#f8f9fc;border:2px solid var(--line);border-radius:14px;padding:14px 10px;cursor:pointer;text-align:center;transition:.15s}
+  .task:hover{border-color:var(--primary);transform:translateY(-2px);background:#eef2ff}
+  .icon{font-size:25px;display:block;margin-bottom:4px}
+  .task strong{display:block;font-size:14px}
+  .task small{color:var(--muted)}
+  .panel{display:none}
+  .panel.active{display:block}
+  .back{border:0;background:#eef2ff;color:#4338ca;border-radius:10px;padding:9px 12px;font-weight:700;cursor:pointer;margin-bottom:14px}
+  .title{font-size:22px;font-weight:800;margin-bottom:5px}
+  .desc{color:var(--muted);font-size:15px;margin-bottom:16px}
+  .stimulus{background:#f8f9fc;border:2px dashed var(--line);border-radius:16px;min-height:160px;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+  .stimulus .big{font-size:66px;font-weight:800;letter-spacing:2px}
+  .buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .btn{border:2px solid var(--line);background:#f8f9fc;border-radius:12px;padding:14px;font-weight:700;color:var(--text)}
+  .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .helper{font-size:13px;color:var(--muted);text-align:center;margin-top:12px}
+  .results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+  .result{border:1px solid var(--line);background:#f8f9fc;border-radius:14px;padding:14px;text-align:center}
+  .ring{width:58px;height:58px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--primary) 0 72%,#e5e7eb 72%);position:relative}
+  .ring:after{content:"";width:44px;height:44px;background:#f8f9fc;border-radius:50%;position:absolute}
+  .ring span{z-index:1;font-weight:800;font-size:12px}
+  .mock{display:inline-block;margin-top:6px;font-size:11px;color:#92400e;background:#fef3c7;padding:3px 7px;border-radius:999px}
+  .summary{display:flex;gap:16px;align-items:center;padding:16px;border-radius:16px;background:linear-gradient(135deg,#f8f9fc,#eef2ff);border:2px solid var(--primary)}
+  .summary .score{font-size:34px;font-weight:900;color:var(--primary)}
+  .hidden{display:none!important}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:10px 4px 4px}
+  @media(max-width:600px){body{padding:12px}.card{padding:20px 16px}.grid{grid-template-columns:repeat(2,1fr)}h1{font-size:22px}.buttons{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>🧠 Batería Digital de Funciones Ejecutivas</h1>
+    <span class="demo-badge">DEMO PÚBLICA</span>
+  </div>
+
+  <div class="notice">
+    <strong>Versión demostrativa.</strong> Esta página reproduce la apariencia general y el flujo visual de BDFE, pero no incluye los algoritmos de evaluación, generación de estímulos, temporización, cálculo de puntajes ni lógica de interpretación de la versión funcional.
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tabTasks" onclick="showTab('tasks')">🧪 Tareas</button>
+    <button class="tab" id="tabResults" onclick="showTab('results')">📊 Resultados</button>
+  </div>
+
+  <section id="tasksView">
+    <div class="card" id="taskList">
+      <div class="eyebrow">Selecciona una tarea</div>
+      <div class="grid">
+        <div class="task" onclick="openTask('wm')"><span class="icon">🧩</span><strong>Memoria de Trabajo</strong><small>1-back</small></div>
+        <div class="task" onclick="openTask('inh')"><span class="icon">🚫</span><strong>Inhibición</strong><small>Go/No-Go</small></div>
+        <div class="task" onclick="openTask('speed')"><span class="icon">⚡</span><strong>Velocidad</strong><small>Procesamiento</small></div>
+        <div class="task" onclick="openTask('flex')"><span class="icon">🔄</span><strong>Flexibilidad</strong><small>Cambio de regla</small></div>
+        <div class="task" onclick="openTask('plan')"><span class="icon">🎯</span><strong>Planificación</strong><small>Torre de Hanoi</small></div>
+        <div class="task" onclick="openTask('reason')"><span class="icon">🧩</span><strong>Razonamiento</strong><small>Matrices</small></div>
+        <div class="task" onclick="openTask('att')"><span class="icon">👁️</span><strong>Atención</strong><small>Sostenida</small></div>
+        <div class="task" onclick="openTask('dual')"><span class="icon">🎭</span><strong>Doble Criterio</strong><small>Regla conjunta</small></div>
+        <div class="task" onclick="openTask('stroop')"><span class="icon">🎨</span><strong>Interferencia</strong><small>Stroop</small></div>
+        <div class="task" onclick="openTask('decision')"><span class="icon">🎲</span><strong>Decisiones</strong><small>Riesgo</small></div>
+      </div>
+      <div class="helper">Demo de navegación. Las tareas no ejecutan procedimientos de evaluación.</div>
+    </div>
+
+    <div class="card panel" id="taskPanel">
+      <button class="back" onclick="closeTask()">← Volver a la lista</button>
+      <div class="title" id="demoTitle"></div>
+      <div class="desc" id="demoDesc"></div>
+      <div class="stimulus" id="demoStimulus"></div>
+      <div class="buttons" id="demoButtons"></div>
+      <div class="helper">Pantalla ilustrativa — interacción desactivada en la versión pública.</div>
+    </div>
+  </section>
+
+  <section id="resultsView" class="hidden">
+    <div class="card">
+      <div class="title">📊 Resultados por tarea</div>
+      <div class="desc">Ejemplo visual con datos ficticios. No corresponde a una evaluación real.</div>
+      <div class="results-grid">
+        <div class="result"><div class="ring"><span>72%</span></div><strong>Memoria de Trabajo</strong><br><span class="mock">Dato ficticio</span></div>
+        <div class="result"><div class="ring" style="background:conic-gradient(var(--primary) 0 64%,#e5e7eb 64%)"><span>64%</span></div><strong>Inhibición</strong><br><span class="mock">Dato ficticio</span></div>
+        <div class="result"><div class="ring" style="background:conic-gradient(var(--primary) 0 81%,#e5e7eb 81%)"><span>81%</span></div><strong>Flexibilidad</strong><br><span class="mock">Dato ficticio</span></div>
+        <div class="result"><div class="ring" style="background:conic-gradient(var(--primary) 0 69%,#e5e7eb 69%)"><span>69%</span></div><strong>Atención</strong><br><span class="mock">Dato ficticio</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="title">🏁 Síntesis visual</div>
+      <div class="summary">
+        <div class="score">Demo</div>
+        <div>
+          <strong>Vista de resultados globales</strong>
+          <div class="desc" style="margin:4px 0 0">La versión funcional integra los resultados de las tareas completadas. Esta demo no calcula ni interpreta desempeño.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Lorena Chacana Véliz. Todos los derechos reservados. BDFE se encuentra en etapa previa a validación psicométrica. Esta demo tiene fines exclusivamente demostrativos.
+  </footer>
+</div>
+
+<script>
+const demos = {
+  wm:{
+    title:"🧩 Memoria de Trabajo (1-back)",
+    desc:"Ejemplo de la pantalla de presentación de estímulos y respuesta.",
+    stimulus:'<div class="big">K</div>',
+    buttons:'<button class="btn primary" disabled>← Igual</button><button class="btn" disabled>→ Diferente</button>'
+  },
+  inh:{
+    title:"🚫 Inhibición (Go/No-Go)",
+    desc:"Ejemplo visual de una tarea de control inhibitorio.",
+    stimulus:'<div class="big">X</div>',
+    buttons:'<button class="btn primary" disabled>ESPACIO</button><button class="btn" disabled>No responder</button>'
+  },
+  speed:{
+    title:"⚡ Velocidad de Procesamiento",
+    desc:"Ejemplo de una pantalla de respuesta rápida ante estímulos.",
+    stimulus:'<div class="big">7</div>',
+    buttons:'<button class="btn primary" disabled>Izquierda</button><button class="btn" disabled>Derecha</button>'
+  },
+  flex:{
+    title:"🔄 Flexibilidad Cognitiva",
+    desc:"Ejemplo visual de una tarea en la que cambia la regla de respuesta.",
+    stimulus:'<div><div style="font-size:18px;color:#6b7280;margin-bottom:8px">Regla actual: FORMA</div><div class="big">▲</div></div>',
+    buttons:'<button class="btn primary" disabled>Opción A</button><button class="btn" disabled>Opción B</button>'
+  },
+  plan:{
+    title:"🎯 Planificación (Torre de Hanoi)",
+    desc:"Representación visual del módulo de planificación.",
+    stimulus:'<div style="font-size:44px">▂ ▅ █ &nbsp;&nbsp;│&nbsp;&nbsp; │</div>',
+    buttons:'<button class="btn primary" disabled>Mover</button><button class="btn" disabled>Reiniciar</button>'
+  },
+  reason:{
+    title:"🧩 Razonamiento",
+    desc:"Ejemplo de una pantalla de razonamiento lógico-abstracto.",
+    stimulus:'<div style="font-size:46px">◼︎ ◻︎ ◼︎ &nbsp; ?</div>',
+    buttons:'<button class="btn primary" disabled>Opción 1</button><button class="btn" disabled>Opción 2</button>'
+  },
+  att:{
+    title:"👁️ Atención Sostenida",
+    desc:"Ejemplo visual de presentación secuencial de estímulos.",
+    stimulus:'<div class="big">●</div>',
+    buttons:'<button class="btn primary" disabled>Responder</button><button class="btn" disabled>Omitir</button>'
+  },
+  dual:{
+    title:"🎭 Doble Criterio",
+    desc:"Ejemplo de una tarea que requiere integrar dos reglas.",
+    stimulus:'<div style="font-size:60px">🔵 ▲</div>',
+    buttons:'<button class="btn primary" disabled>Cumple</button><button class="btn" disabled>No cumple</button>'
+  },
+  stroop:{
+    title:"🎨 Control de Interferencia",
+    desc:"Ejemplo visual inspirado en una tarea tipo Stroop.",
+    stimulus:'<div style="font-size:58px;font-weight:900">AZUL</div>',
+    buttons:'<button class="btn primary" disabled>Color A</button><button class="btn" disabled>Color B</button>'
+  },
+  decision:{
+    title:"🎲 Toma de Decisiones",
+    desc:"Ejemplo de presentación de alternativas de decisión.",
+    stimulus:'<div style="font-size:28px;font-weight:800">Opción A &nbsp; vs &nbsp; Opción B</div>',
+    buttons:'<button class="btn primary" disabled>Elegir A</button><button class="btn" disabled>Elegir B</button>'
+  }
+};
+
+function openTask(id){
+  const d=demos[id];
+  document.getElementById("taskList").style.display="none";
+  document.getElementById("taskPanel").classList.add("active");
+  document.getElementById("demoTitle").textContent=d.title;
+  document.getElementById("demoDesc").textContent=d.desc;
+  document.getElementById("demoStimulus").innerHTML=d.stimulus;
+  document.getElementById("demoButtons").innerHTML=d.buttons;
+}
+function closeTask(){
+  document.getElementById("taskList").style.display="block";
+  document.getElementById("taskPanel").classList.remove("active");
+}
+function showTab(tab){
+  const tasks=tab==="tasks";
+  document.getElementById("tasksView").classList.toggle("hidden",!tasks);
+  document.getElementById("resultsView").classList.toggle("hidden",tasks);
+  document.getElementById("tabTasks").classList.toggle("active",tasks);
+  document.getElementById("tabResults").classList.toggle("active",!tasks);
+  if(tasks) closeTask();
+}
+</script>
+</body>
+</html>
